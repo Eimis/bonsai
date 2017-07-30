@@ -8,6 +8,7 @@ var path = require('path');
 //serve static files:
 app.use('/bower_components',  express.static(__dirname + '/bower_components'));
 app.use('/app/config',  express.static(__dirname + '/app/config'));
+app.use('/app/components',  express.static(__dirname + '/app/components'));
 
 //main view:
 app.use('/', function(req, res) {
