@@ -1,0 +1,13 @@
+
+
+.component-wrapper {
+  text-align: center;
+}
+
+ .component-wrapper .game-table {
+  margin: 0 auto;
+}
+
+.component-wrapper .game-table td {
+  width: 50px;
+}

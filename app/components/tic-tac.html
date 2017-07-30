@@ -1,1 +1,23 @@
-<p>Tic tac game</p>
+<div class="component-wrapper">
+  <p>You are:
+  <label>
+    <input type="radio" value="O" ng-model="player" /><strong>O</strong>
+  </label>
+  <label>
+    <input type="radio" value="X" ng-model="player" value="Clear Board" /><strong>X</strong>
+  </label>
+  </p>
+  <div>
+    <p ng-show="currentPlayer == player">Your Turn</p>
+
+    <p ng-show="currentPlayer != player">Waiting for Opponent</p>
+
+    <p ng-show="winner">WINNER IS {{winner}}! <br> <input type="button" ng-click="newGame()" value="New Game" /></p>
+
+    <table border="1" class="game-table">
+      <tr ng-repeat="row in [0,1,2]">
+        <td ng-repeat="column in [0,1,2]" ng-click="cellClick(row,column)">{{cellText(row,column)}}</td>
+      </tr>
+    </table>
+  </div>
+</div>
