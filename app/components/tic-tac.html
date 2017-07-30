@@ -12,12 +12,14 @@
 
     <p ng-show="currentPlayer != player && !winner">Waiting for Opponent</p>
 
-    <p ng-show="winner">WINNER IS {{winner}}! <br> <input type="button" ng-click="newGame()" value="New Game" /></p>
+    <p ng-show="winner">WINNER IS {{winner}}! <br> </p>
 
     <table border="1" class="game-table">
       <tr ng-repeat="row in [0,1,2]">
         <td ng-repeat="column in [0,1,2]" ng-click="cellClick(row,column)">{{cellText(row,column)}}</td>
       </tr>
     </table>
+    <br>
+    <input type="button" ng-click="newGame()" value="Restart game" />
   </div>
 </div>
