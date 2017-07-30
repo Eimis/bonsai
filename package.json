@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/Eimis/bonsai/issues"
   },
-  "homepage": "https://github.com/Eimis/bonsai#readme"
+  "homepage": "https://github.com/Eimis/bonsai#readme",
+  "dependencies": {
+    "express": "^4.15.3"
+  }
 }
