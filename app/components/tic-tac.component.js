@@ -6,18 +6,14 @@ var ticTacController = function($rootScope, $scope, ticTacModel, localStorageSer
   ctrl.model = ticTacModel;
 
   ctrl.$onInit = function() {
-    ctrl.model.updateData();
+    //ctrl.model.updateData();
+    loadSavedGame();
   }
 
-  // == initialize scope ==
-  $scope.currentPlayer = 'O'
-  $scope.player = 'O'
+  // initialize scope
+  var _STARTING_PLAYER = 'X'
+
   $scope.winner = null
-  $scope.board = [
-    [null, null, null],
-    [null, null, null],
-    [null, null, null]
-  ]
 
   //SCOPE FUNCTIONS
 
@@ -28,7 +24,8 @@ var ticTacController = function($rootScope, $scope, ticTacModel, localStorageSer
 
   $scope.cellClick = function(row, column) {
 
-    console.log($scope.board)
+    localStorageService.set('currentPlayer', $scope.currentPlayer)
+    localStorageService.set('player', $scope.player)
 
     if ($scope.winner) {
       alert('Game is already over')
@@ -49,13 +46,48 @@ var ticTacController = function($rootScope, $scope, ticTacModel, localStorageSer
         setCell(i, j, null)
       }
     }
-    $scope.currentPlayer = 'O'
-    $scope.player = 'O'
+    $scope.currentPlayer = _STARTING_PLAYER
+    $scope.player = _STARTING_PLAYER
     $scope.winner = null
+
+    localStorageService.set('board', null)
+    localStorageService.set('currentPlayer', null)
+    localStorageService.set('player', null)
   }
 
 
   // UTILITY FUNCTIONS
+
+  //a function to check and load previous game from local storage if needed:
+  function loadSavedGame() {
+    var board = localStorageService.get('board')
+    var currentPlayer = localStorageService.get('currentPlayer')
+    var player = localStorageService.get('player')
+
+
+    if (board) {
+      $scope.board = board
+    } else {  // new board
+      $scope.board = [
+        [null, null, null],
+        [null, null, null],
+        [null, null, null]
+      ]
+    }
+
+    if (currentPlayer) {
+      $scope.currentPlayer = currentPlayer
+    } else {
+      $scope.currentPlayer = _STARTING_PLAYER
+    }
+
+    if (player) {
+      $scope.player = player
+    } else {
+      $scope.player = _STARTING_PLAYER
+    }
+
+  }
 
   // returns the value of cell
   function cell(row, column) {
@@ -89,6 +121,7 @@ var ticTacController = function($rootScope, $scope, ticTacModel, localStorageSer
     // no more empty cell - no winner
     if (!empty) {
       $scope.winner = 'NONE'
+      localStorageService.set('board', null);
       return
     }
 
@@ -113,9 +146,30 @@ var ticTacController = function($rootScope, $scope, ticTacModel, localStorageSer
     // winner? declare!
     if (winner) {
       $scope.winner = winner
+
+      localStorageService.set('board', null)
+      localStorageService.set('currentPlayer', null)
+      localStorageService.set('player', null)
     }
 
-  }
+  }  // end of checkBoard() function
+
+  //this would only be needed if we'd have different routes:
+  $scope.$on('$destroy', function() {
+    if (!$scope.winner) {
+      localStorageService.set('board', $scope.board);
+      localStorageService.set('currentPlayer', $scope.currentPlayer)
+      localStorageService.set('player', $scope.player)
+    }
+  });
+
+  window.onbeforeunload = function () {
+    if (!$scope.winner) {
+      localStorageService.set('board', $scope.board);
+      localStorageService.set('currentPlayer', $scope.currentPlayer)
+      localStorageService.set('player', $scope.player)
+    }
+  };
 
 }
 

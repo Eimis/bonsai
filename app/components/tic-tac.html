@@ -1,16 +1,16 @@
 <div class="component-wrapper">
   <p>You are:
   <label>
-    <input type="radio" value="O" ng-model="player" /><strong>O</strong>
+    <input type="radio" value="X" ng-model="player" value="Clear Board" /><strong>X</strong>
   </label>
   <label>
-    <input type="radio" value="X" ng-model="player" value="Clear Board" /><strong>X</strong>
+    <input type="radio" value="O" ng-model="player" /><strong>O</strong>
   </label>
   </p>
   <div>
     <p ng-show="currentPlayer == player">Your Turn</p>
 
-    <p ng-show="currentPlayer != player">Waiting for Opponent</p>
+    <p ng-show="currentPlayer != player && !winner">Waiting for Opponent</p>
 
     <p ng-show="winner">WINNER IS {{winner}}! <br> <input type="button" ng-click="newGame()" value="New Game" /></p>
 
