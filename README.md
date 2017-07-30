@@ -5,3 +5,5 @@ How to start the frontend server:
 `npm install`
 `bower install`
 `npm start`
+
+Visit `http://localhost:8000/#/`
