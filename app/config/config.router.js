@@ -1,12 +1,23 @@
-var myApp = angular.module('bonsai', ['ui.router']);
+var myApp = angular.module('bonsai', ['ui.router', 'oc.lazyLoad', ]);
 
 myApp.config(function($stateProvider) {
-  console.log('ROUTER')
-  var homeState = {
-    name: 'home',
-    url: '/',
-    template: '<h3>It works</h3>'
-  }
 
-  $stateProvider.state(homeState);
+  //$urlRouterProvider.otherwise('/');
+
+  $stateProvider
+
+    .state('home', {
+    url: '/',
+    template: '<tictac></tictac>',
+    resolve: {
+      deps: ['$ocLazyLoad', function($ocLazyLoad) {
+        return $ocLazyLoad.load([
+          'app/components/tic-tac.model.js',
+          'app/components/tic-tac.component.js',
+        ]);
+      }]
+    }
+
+  })
+
 });
