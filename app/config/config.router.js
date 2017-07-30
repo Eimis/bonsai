@@ -1,4 +1,4 @@
-var myApp = angular.module('bonsai', ['ui.router', 'oc.lazyLoad', ]);
+var myApp = angular.module('bonsai', ['ui.router', 'oc.lazyLoad', 'LocalStorageModule', ]);
 
 myApp.config(function($stateProvider) {
 

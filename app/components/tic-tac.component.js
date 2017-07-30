@@ -1,6 +1,6 @@
 'use strict'
 
-var ticTacController = function($rootScope, $scope, ticTacModel) {
+var ticTacController = function($rootScope, $scope, ticTacModel, localStorageService) {
 
   var ctrl = this;
   ctrl.model = ticTacModel;
@@ -19,7 +19,7 @@ var ticTacController = function($rootScope, $scope, ticTacModel) {
     [null, null, null]
   ]
 
-  // == scope functions ==
+  //SCOPE FUNCTIONS
 
   $scope.cellText = function(row, column) {
     var value = cell(row, column)
@@ -27,6 +27,9 @@ var ticTacController = function($rootScope, $scope, ticTacModel) {
   }
 
   $scope.cellClick = function(row, column) {
+
+    console.log($scope.board)
+
     if ($scope.winner) {
       alert('Game is already over')
       return
@@ -52,7 +55,7 @@ var ticTacController = function($rootScope, $scope, ticTacModel) {
   }
 
 
-  // == utility functions ==
+  // UTILITY FUNCTIONS
 
   // returns the value of cell
   function cell(row, column) {
