@@ -47,11 +47,21 @@ var ticTacController = function($rootScope, $scope, ticTacModel, localStorageSer
         setCell(i, j, null)
       }
     }
-    $scope.currentPlayer = _STARTING_PLAYER
-    $scope.player = _STARTING_PLAYER
-    $scope.winner = null
+      ctrl.model.initializeGame().then(function(response){
+        console.log('new game: ', response.game)
 
-    destroyGame();
+        $scope.game = response.game.pk;
+        $scope.board = [
+          [null, null, null],
+          [null, null, null],
+          [null, null, null]
+        ]
+        $scope.winner = null;
+        $scope.currentPlayer = _STARTING_PLAYER
+        $scope.player = _STARTING_PLAYER
+      });
+
+    saveGame();
   }
 
 
@@ -64,6 +74,8 @@ var ticTacController = function($rootScope, $scope, ticTacModel, localStorageSer
     var currentPlayer = localStorageService.get('currentPlayer')
     var player = localStorageService.get('player')
 
+    //if saved game exists in local storage, load it. Otherwise use API to
+    //create a new one:
     if (game) {
       $scope.game = game
       $scope.board = board
