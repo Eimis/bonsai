@@ -14,7 +14,7 @@
 
     <p ng-show="winner">WINNER IS {{winner}}! <br> </p>
 
-    <table border="1" class="game-table">
+    <table border="1" class="game-table" ng-if="board">
       <tr ng-repeat="row in [0,1,2]">
         <td ng-repeat="column in [0,1,2]" ng-click="cellClick(row,column)">{{cellText(row,column)}}</td>
       </tr>

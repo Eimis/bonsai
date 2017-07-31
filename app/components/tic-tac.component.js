@@ -6,7 +6,6 @@ var ticTacController = function($rootScope, $scope, ticTacModel, localStorageSer
   ctrl.model = ticTacModel;
 
   ctrl.$onInit = function() {
-    //ctrl.model.updateData();
     loadSavedGame();
   }
 
@@ -23,6 +22,8 @@ var ticTacController = function($rootScope, $scope, ticTacModel, localStorageSer
   }
 
   $scope.cellClick = function(row, column) {
+
+    console.log(row, column)
 
     localStorageService.set('currentPlayer', $scope.currentPlayer)
     localStorageService.set('player', $scope.player)
@@ -50,9 +51,7 @@ var ticTacController = function($rootScope, $scope, ticTacModel, localStorageSer
     $scope.player = _STARTING_PLAYER
     $scope.winner = null
 
-    localStorageService.set('board', null)
-    localStorageService.set('currentPlayer', null)
-    localStorageService.set('player', null)
+    destroyGame();
   }
 
 
@@ -60,33 +59,47 @@ var ticTacController = function($rootScope, $scope, ticTacModel, localStorageSer
 
   //a function to check and load previous game from local storage if needed:
   function loadSavedGame() {
+    var game = localStorageService.get('game')
     var board = localStorageService.get('board')
     var currentPlayer = localStorageService.get('currentPlayer')
     var player = localStorageService.get('player')
 
-
-    if (board) {
+    if (game) {
+      $scope.game = game
       $scope.board = board
-    } else {  // new board
-      $scope.board = [
-        [null, null, null],
-        [null, null, null],
-        [null, null, null]
-      ]
-    }
-
-    if (currentPlayer) {
       $scope.currentPlayer = currentPlayer
-    } else {
-      $scope.currentPlayer = _STARTING_PLAYER
-    }
-
-    if (player) {
       $scope.player = player
     } else {
-      $scope.player = _STARTING_PLAYER
+      ctrl.model.initializeGame().then(function(response){
+        console.log('new game: ', response.game)
+
+        $scope.game = response.game.pk;
+        $scope.board = [
+          [null, null, null],
+          [null, null, null],
+          [null, null, null]
+        ]
+        $scope.currentPlayer = _STARTING_PLAYER
+        $scope.player = _STARTING_PLAYER
+      });
     }
 
+  }
+
+  //saves game variables to local storage
+  function saveGame() {
+      localStorageService.set('game', $scope.game);
+      localStorageService.set('board', $scope.board);
+      localStorageService.set('currentPlayer', $scope.currentPlayer)
+      localStorageService.set('player', $scope.player)
+  }
+
+  //removes local game variables from local storage:
+  function destroyGame() {
+      localStorageService.set('game', null)
+      localStorageService.set('board', null)
+      localStorageService.set('currentPlayer', null)
+      localStorageService.set('player', null)
   }
 
   // returns the value of cell
@@ -121,7 +134,8 @@ var ticTacController = function($rootScope, $scope, ticTacModel, localStorageSer
     // no more empty cell - no winner
     if (!empty) {
       $scope.winner = 'NONE'
-      localStorageService.set('board', null);
+      destroyGame();
+
       return
     }
 
@@ -147,9 +161,7 @@ var ticTacController = function($rootScope, $scope, ticTacModel, localStorageSer
     if (winner) {
       $scope.winner = winner
 
-      localStorageService.set('board', null)
-      localStorageService.set('currentPlayer', null)
-      localStorageService.set('player', null)
+        destroyGame();
     }
 
   }  // end of checkBoard() function
@@ -157,17 +169,13 @@ var ticTacController = function($rootScope, $scope, ticTacModel, localStorageSer
   //this would only be needed if we'd have different routes:
   $scope.$on('$destroy', function() {
     if (!$scope.winner) {
-      localStorageService.set('board', $scope.board);
-      localStorageService.set('currentPlayer', $scope.currentPlayer)
-      localStorageService.set('player', $scope.player)
+      saveGame()
     }
   });
 
   window.onbeforeunload = function () {
     if (!$scope.winner) {
-      localStorageService.set('board', $scope.board);
-      localStorageService.set('currentPlayer', $scope.currentPlayer)
-      localStorageService.set('player', $scope.player)
+      saveGame()
     }
   };
 
