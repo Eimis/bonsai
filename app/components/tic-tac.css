@@ -11,3 +11,12 @@
 .component-wrapper .game-table td {
   width: 50px;
 }
+
+.component-wrapper .game {
+  width: 40%;
+  margin: 0 auto;
+}
+
+.disabled {
+  background-color: rgba(211, 211, 211, 0.6)
+}

@@ -21,6 +21,10 @@ var ticTacController = function($rootScope, $scope, ticTacModel, localStorageSer
 
   $scope.cellClick = function(row, column) {
 
+    if ($scope.loading) {
+      return
+    }
+
     console.log(row, column)
 
     localStorageService.set('currentPlayer', $scope.currentPlayer)
@@ -53,6 +57,8 @@ var ticTacController = function($rootScope, $scope, ticTacModel, localStorageSer
 
   // UTILITY FUNCTIONS
   function resetGameVariables() {
+    $scope.loading = true;
+
     ctrl.model.initializeGame().then(function(response){
       console.log('new game: ', response.game)
 
@@ -65,6 +71,8 @@ var ticTacController = function($rootScope, $scope, ticTacModel, localStorageSer
       $scope.winner = null;
       $scope.currentPlayer = _STARTING_PLAYER
       $scope.player = _STARTING_PLAYER
+
+      $scope.loading = false;
     });
   }
 

@@ -7,7 +7,7 @@
     <input type="radio" value="O" ng-model="player" /><strong>O</strong>
   </label>
   </p>
-  <div>
+  <div class="game" ng-class="{disabled: loading}">
     <p ng-show="currentPlayer == player">Your Turn</p>
 
     <p ng-show="currentPlayer != player && !winner">Waiting for Opponent</p>
