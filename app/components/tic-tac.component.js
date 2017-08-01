@@ -27,9 +27,6 @@ var ticTacController = function($rootScope, $scope, ticTacModel, localStorageSer
 
     console.log(row, column)
 
-    localStorageService.set('currentPlayer', $scope.currentPlayer)
-    localStorageService.set('player', $scope.player)
-
     if ($scope.winner) {
       alert('Game is already over')
       return
@@ -38,6 +35,22 @@ var ticTacController = function($rootScope, $scope, ticTacModel, localStorageSer
       alert('Not your turn')
       return
     }
+
+    ctrl.model.logGame($scope, row, column).then(function(resp){
+      console.log('done logging')
+
+      $scope.error = null;
+      if (resp.log.error) {
+        $scope.error = resp.log.error
+      } else {
+        //TODO: array:
+        $scope.log = resp.log
+      }
+    })
+
+    localStorageService.set('currentPlayer', $scope.currentPlayer)
+    localStorageService.set('player', $scope.player)
+
     setCell(row, column, $scope.player)
     checkBoard()
     $scope.currentPlayer = nextPlayer($scope.currentPlayer)

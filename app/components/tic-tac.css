@@ -17,6 +17,11 @@
   margin: 0 auto;
 }
 
+.component-wrapper p.error {
+  color: red;
+  font-size: 15px;
+}
+
 .disabled {
   background-color: rgba(211, 211, 211, 0.6)
 }
