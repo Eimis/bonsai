@@ -11,11 +11,9 @@ var ticTacController = function($rootScope, $scope, ticTacModel, localStorageSer
 
   // initialize scope
   var _STARTING_PLAYER = 'X'
-
   $scope.winner = null
 
   //SCOPE FUNCTIONS
-
   $scope.cellText = function(row, column) {
     var value = cell(row, column)
     return value ? value : '-'
@@ -48,6 +46,13 @@ var ticTacController = function($rootScope, $scope, ticTacModel, localStorageSer
       }
     }
 
+    resetGameVariables();
+    saveGameVariables();
+  }
+
+
+  // UTILITY FUNCTIONS
+  function resetGameVariables() {
     ctrl.model.initializeGame().then(function(response){
       console.log('new game: ', response.game)
 
@@ -61,12 +66,7 @@ var ticTacController = function($rootScope, $scope, ticTacModel, localStorageSer
       $scope.currentPlayer = _STARTING_PLAYER
       $scope.player = _STARTING_PLAYER
     });
-
-    saveGameVariables();
   }
-
-
-  // UTILITY FUNCTIONS
 
   //a function to check and load previous game from local storage if needed:
   function loadSavedGame() {
@@ -83,18 +83,8 @@ var ticTacController = function($rootScope, $scope, ticTacModel, localStorageSer
       $scope.currentPlayer = currentPlayer
       $scope.player = player
     } else {
-      ctrl.model.initializeGame().then(function(response){
-        console.log('new game: ', response.game)
-
-        $scope.game = response.game.pk;
-        $scope.board = [
-          [null, null, null],
-          [null, null, null],
-          [null, null, null]
-        ]
-        $scope.currentPlayer = _STARTING_PLAYER
-        $scope.player = _STARTING_PLAYER
-      });
+      resetGameVariables();
+      saveGameVariables();
     }
 
   }
@@ -149,6 +139,8 @@ var ticTacController = function($rootScope, $scope, ticTacModel, localStorageSer
       $scope.winner = 'NONE'
       destroyGameVariables();
 
+      //user gas to click 'new game' at this point
+
       return
     }
 
@@ -185,6 +177,7 @@ var ticTacController = function($rootScope, $scope, ticTacModel, localStorageSer
     }
   });
 
+  //refreshing the page:
   window.onbeforeunload = function () {
     if (!$scope.winner) {
       saveGameVariables()
