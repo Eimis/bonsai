@@ -12,6 +12,7 @@ var ticTacController = function($rootScope, $scope, ticTacModel, localStorageSer
   // initialize scope
   var _STARTING_PLAYER = 'X'
   $scope.winner = null
+  $scope.logs = []
 
   //SCOPE FUNCTIONS
   $scope.cellText = function(row, column) {
@@ -25,12 +26,11 @@ var ticTacController = function($rootScope, $scope, ticTacModel, localStorageSer
       return
     }
 
-    console.log(row, column)
-
     if ($scope.winner) {
       alert('Game is already over')
       return
     }
+
     if ($scope.player != $scope.currentPlayer) {
       alert('Not your turn')
       return
@@ -44,15 +44,16 @@ var ticTacController = function($rootScope, $scope, ticTacModel, localStorageSer
         $scope.error = resp.log.error
       } else {
         //TODO: array:
-        $scope.log = resp.log
+        $scope.logs.push(resp.log);
+        console.log('logs: ', $scope.logs)
       }
     })
 
     localStorageService.set('currentPlayer', $scope.currentPlayer)
     localStorageService.set('player', $scope.player)
 
-    setCell(row, column, $scope.player)
-    checkBoard()
+    setCell(row, column, $scope.player);
+    checkBoard();
     $scope.currentPlayer = nextPlayer($scope.currentPlayer)
   }
 
@@ -71,6 +72,9 @@ var ticTacController = function($rootScope, $scope, ticTacModel, localStorageSer
   // UTILITY FUNCTIONS
   function resetGameVariables() {
     $scope.loading = true;
+
+    $scope.error = null
+    $scope.logs = []
 
     ctrl.model.initializeGame().then(function(response){
       console.log('new game: ', response.game)
@@ -95,6 +99,7 @@ var ticTacController = function($rootScope, $scope, ticTacModel, localStorageSer
     var board = localStorageService.get('board')
     var currentPlayer = localStorageService.get('currentPlayer')
     var player = localStorageService.get('player')
+    var logs = localStorageService.get('logs')
 
     //if saved game exists in local storage, load it. Otherwise use API to
     //create a new one:
@@ -103,6 +108,7 @@ var ticTacController = function($rootScope, $scope, ticTacModel, localStorageSer
       $scope.board = board
       $scope.currentPlayer = currentPlayer
       $scope.player = player
+      $scope.logs = logs
     } else {
       resetGameVariables();
       saveGameVariables();
@@ -116,6 +122,7 @@ var ticTacController = function($rootScope, $scope, ticTacModel, localStorageSer
       localStorageService.set('board', $scope.board);
       localStorageService.set('currentPlayer', $scope.currentPlayer)
       localStorageService.set('player', $scope.player)
+      localStorageService.set('logs', $scope.logs)
   }
 
   //removes local game variables from local storage:
@@ -124,6 +131,7 @@ var ticTacController = function($rootScope, $scope, ticTacModel, localStorageSer
       localStorageService.set('board', null)
       localStorageService.set('currentPlayer', null)
       localStorageService.set('player', null)
+      localStorageService.set('logs', [])
   }
 
   // returns the value of cell
