@@ -47,21 +47,22 @@ var ticTacController = function($rootScope, $scope, ticTacModel, localStorageSer
         setCell(i, j, null)
       }
     }
-      ctrl.model.initializeGame().then(function(response){
-        console.log('new game: ', response.game)
 
-        $scope.game = response.game.pk;
-        $scope.board = [
-          [null, null, null],
-          [null, null, null],
-          [null, null, null]
-        ]
-        $scope.winner = null;
-        $scope.currentPlayer = _STARTING_PLAYER
-        $scope.player = _STARTING_PLAYER
-      });
+    ctrl.model.initializeGame().then(function(response){
+      console.log('new game: ', response.game)
 
-    saveGame();
+      $scope.game = response.game.pk;
+      $scope.board = [
+        [null, null, null],
+        [null, null, null],
+        [null, null, null]
+      ]
+      $scope.winner = null;
+      $scope.currentPlayer = _STARTING_PLAYER
+      $scope.player = _STARTING_PLAYER
+    });
+
+    saveGameVariables();
   }
 
 
@@ -99,7 +100,7 @@ var ticTacController = function($rootScope, $scope, ticTacModel, localStorageSer
   }
 
   //saves game variables to local storage
-  function saveGame() {
+  function saveGameVariables() {
       localStorageService.set('game', $scope.game);
       localStorageService.set('board', $scope.board);
       localStorageService.set('currentPlayer', $scope.currentPlayer)
@@ -107,7 +108,7 @@ var ticTacController = function($rootScope, $scope, ticTacModel, localStorageSer
   }
 
   //removes local game variables from local storage:
-  function destroyGame() {
+  function destroyGameVariables() {
       localStorageService.set('game', null)
       localStorageService.set('board', null)
       localStorageService.set('currentPlayer', null)
@@ -146,7 +147,7 @@ var ticTacController = function($rootScope, $scope, ticTacModel, localStorageSer
     // no more empty cell - no winner
     if (!empty) {
       $scope.winner = 'NONE'
-      destroyGame();
+      destroyGameVariables();
 
       return
     }
@@ -172,8 +173,7 @@ var ticTacController = function($rootScope, $scope, ticTacModel, localStorageSer
     // winner? declare!
     if (winner) {
       $scope.winner = winner
-
-        destroyGame();
+      destroyGameVariables();
     }
 
   }  // end of checkBoard() function
@@ -181,13 +181,13 @@ var ticTacController = function($rootScope, $scope, ticTacModel, localStorageSer
   //this would only be needed if we'd have different routes:
   $scope.$on('$destroy', function() {
     if (!$scope.winner) {
-      saveGame()
+      saveGameVariables()
     }
   });
 
   window.onbeforeunload = function () {
     if (!$scope.winner) {
-      saveGame()
+      saveGameVariables()
     }
   };
 
