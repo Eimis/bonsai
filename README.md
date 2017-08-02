@@ -1,9 +1,8 @@
 # bonsai
 
-How to start the frontend server:
+How to start the app:
 
-* `npm install -g nodemon`
-* `npm install`
-* `bower install`
-* `npm start`
+* clone this repo
+* run `docker-compose up`
+* Congratulations, app is now running!
 * Visit `http://localhost:3000/#/`
