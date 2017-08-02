@@ -22,7 +22,7 @@
     <br>
 
     <p class="error">{{ error }}</p>
-    <p class="logs" ng-repeat="log in logs|orderBy:'-'">{{log.added_on|date:'yyyy-MM-dd HH:mm:ss'}} (Game {{log.game}}): Player '{{log.player}}' moved to row {{log.to_row}} column {{log.to_column}}</p>
+    <p class="logs" ng-repeat="log in logs|orderBy:'-'">{{log.added_on_date|date:'yyyy-MM-dd HH:mm:ss'}} (Game {{log.game}}): Player '{{log.player}}' moved to row {{log.to_row}} column {{log.to_column}}</p>
 
     <input type="button" ng-click="newGame()" value="Restart game" />
   </div>
