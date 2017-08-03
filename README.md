@@ -3,14 +3,14 @@
 Start the backend API server:
 
 * clone this repo: [oak](https://github.com/Eimis/oak)
-* run `docker-compose up`
+* run `docker-compose up --build`
 * Congratulations, API server is now running!
 * You can visit `http://localhost:8000/game/log` to see if the API server works
 
 Start the frontend app:
 
 * clone this repo
-* run `docker-compose up`
+* run `docker-compose up --build`
 * Congratulations, app is now running!
 
 
